@@ -1,0 +1,345 @@
+[
+  {
+    "name": "Occupational Personality Questionnaire (OPQ32)",
+    "url": "https://www.shl.com/solutions/products/assessments/personality-assessment/opq/",
+    "description": "The OPQ32 is one of the world's most widely used and rigorously validated personality questionnaires for the workplace. It measures 32 personality characteristics that predict workplace behavior and performance, providing deep insight into how candidates prefer to work, communicate, lead, and deal with feelings. It is used for selection, development, and succession planning across all levels.",
+    "skills_measured": [
+      "Relationship management", "Thinking style", "Feelings and emotions",
+      "Leadership potential", "Team orientation", "Communication style",
+      "Adaptability", "Drive and energy", "Creativity", "Detail orientation",
+      "Persuasion", "Independence", "Conscientiousness", "Emotional resilience"
+    ],
+    "test_type": "Personality",
+    "duration": "25-45 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["all levels", "leadership", "graduate", "professional", "managerial", "executive"]
+  },
+  {
+    "name": "Motivation Questionnaire (MQ)",
+    "url": "https://www.shl.com/solutions/products/assessments/personality-assessment/motivation-questionnaire-mq/",
+    "description": "The Motivation Questionnaire (MQ) assesses and describes the conditions that increase or decrease a person's motivation and energy at work. It helps organizations understand what drives their employees, improve engagement, reduce turnover, and match candidates to roles where they will thrive. It measures 18 motivation dimensions grouped into four broad areas.",
+    "skills_measured": [
+      "Achievement and recognition", "Personal growth", "Work environment",
+      "Autonomy", "Career progression", "Social contact", "Commercial outlook",
+      "Financial reward", "Security and stability", "Creativity and change"
+    ],
+    "test_type": "Motivation",
+    "duration": "25 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["all levels", "sales", "leadership", "retention screening", "development"]
+  },
+  {
+    "name": "RemoteWorkQ",
+    "url": "https://www.shl.com/solutions/products/assessments/personality-assessment/remoteworkq/",
+    "description": "RemoteWorkQ is a personality-based assessment designed specifically to identify candidates best suited for remote and hybrid working environments. It evaluates key behavioral dimensions critical for remote work success including self-discipline, communication, digital fluency, focus, and the ability to work independently without supervision.",
+    "skills_measured": [
+      "Self-discipline", "Communication in remote settings", "Digital fluency",
+      "Focus and concentration", "Independence", "Proactive communication",
+      "Time management", "Work-life balance", "Virtual collaboration"
+    ],
+    "test_type": "Personality",
+    "duration": "10-15 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["remote workers", "hybrid workers", "all levels", "knowledge workers", "software developers"]
+  },
+  {
+    "name": "ADEPT-15 Personality Assessment",
+    "url": "https://www.shl.com/solutions/products/assessments/personality-assessment/adept-15/",
+    "description": "ADEPT-15 is a concise, 15-dimension personality assessment designed for high-volume, entry-level, and front-line hiring. It is faster than OPQ32 while still providing meaningful behavioral insight. ADEPT-15 predicts key workplace behaviors including safety, customer service orientation, teamwork, and reliability — making it ideal for rapid screening at scale.",
+    "skills_measured": [
+      "Safety awareness", "Customer service orientation", "Teamwork",
+      "Reliability and conscientiousness", "Positivity", "Stress tolerance",
+      "Initiative", "Detail focus", "Rule following", "Flexibility"
+    ],
+    "test_type": "Personality",
+    "duration": "10-15 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["entry-level", "front-line", "high-volume hiring", "warehouse", "retail", "customer service", "manufacturing"]
+  },
+  {
+    "name": "Verify G+ (General Cognitive Ability)",
+    "url": "https://www.shl.com/solutions/products/assessments/cognitive-assessments/verify-g-plus/",
+    "description": "Verify G+ is SHL's flagship adaptive general cognitive ability test that measures verbal, numerical, and inductive reasoning in a single adaptive instrument. The adaptive format means the difficulty adjusts to the candidate's responses, providing a precise measure of cognitive potential in less time than traditional fixed-form tests. It is one of the strongest predictors of job performance across all roles and levels.",
+    "skills_measured": [
+      "Verbal reasoning", "Numerical reasoning", "Inductive reasoning",
+      "Abstract thinking", "Problem-solving", "Learning agility",
+      "Logical analysis", "Pattern recognition"
+    ],
+    "test_type": "Cognitive",
+    "duration": "36 minutes",
+    "remote_testing": true,
+    "adaptive": true,
+    "suitable_for": ["graduate", "managerial", "professional", "technical", "leadership", "all levels"]
+  },
+  {
+    "name": "Verify Numerical Reasoning",
+    "url": "https://www.shl.com/solutions/products/assessments/cognitive-assessments/verify-range-of-ability-tests/",
+    "description": "Verify Numerical Reasoning tests the ability to analyze and interpret numerical data such as tables, graphs, and charts. Candidates must draw accurate conclusions from numerical information presented in a business context. Available in multiple difficulty levels for different job roles, from entry-level to senior management.",
+    "skills_measured": [
+      "Numerical data interpretation", "Chart and graph analysis",
+      "Business arithmetic", "Statistical reasoning", "Data-driven decision making",
+      "Financial data analysis"
+    ],
+    "test_type": "Cognitive",
+    "duration": "17-25 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["finance", "analytics", "data roles", "management", "graduate", "professional"]
+  },
+  {
+    "name": "Verify Verbal Reasoning",
+    "url": "https://www.shl.com/solutions/products/assessments/cognitive-assessments/verify-range-of-ability-tests/",
+    "description": "Verify Verbal Reasoning assesses the ability to understand, analyse, and draw conclusions from written information. Candidates read short passages and determine whether statements are True, False, or Cannot Say. It measures comprehension, logical deduction from text, and the ability to separate fact from inference — critical for roles involving policy, legal, communications, and management.",
+    "skills_measured": [
+      "Reading comprehension", "Logical deduction from text", "Critical evaluation",
+      "Written communication understanding", "Fact vs inference discrimination",
+      "Language processing"
+    ],
+    "test_type": "Cognitive",
+    "duration": "17-19 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["communications", "legal", "HR", "management", "graduate", "professional", "customer service"]
+  },
+  {
+    "name": "Verify Inductive Reasoning",
+    "url": "https://www.shl.com/solutions/products/assessments/cognitive-assessments/verify-range-of-ability-tests/",
+    "description": "Verify Inductive Reasoning measures the ability to identify patterns and rules within sequences of shapes and figures, and apply those rules to predict the next item. It assesses fluid intelligence — the ability to think logically in novel situations without relying on prior knowledge. Particularly relevant for technical, analytical, and problem-solving roles.",
+    "skills_measured": [
+      "Pattern recognition", "Abstract reasoning", "Fluid intelligence",
+      "Logical rule identification", "Analytical thinking", "Novel problem solving"
+    ],
+    "test_type": "Cognitive",
+    "duration": "24 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["software developers", "engineers", "data scientists", "analysts", "technical roles", "graduate"]
+  },
+  {
+    "name": "Verify Deductive Reasoning",
+    "url": "https://www.shl.com/solutions/products/assessments/cognitive-assessments/verify-range-of-ability-tests/",
+    "description": "Verify Deductive Reasoning tests the ability to apply logical rules to reach conclusions. Candidates are given sets of rules or premises and must determine which conclusions logically follow. It measures structured analytical thinking and the ability to apply systematic logic — highly relevant for roles requiring compliance, policy implementation, and structured decision-making.",
+    "skills_measured": [
+      "Deductive logic", "Systematic analysis", "Rule application",
+      "Structured reasoning", "Conclusion validation"
+    ],
+    "test_type": "Cognitive",
+    "duration": "20 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["legal", "compliance", "finance", "management", "operations", "graduate"]
+  },
+  {
+    "name": "Verify Calculation and Estimation",
+    "url": "https://www.shl.com/solutions/products/assessments/cognitive-assessments/verify-range-of-ability-tests/",
+    "description": "Verify Calculation and Estimation tests numerical computation skills including arithmetic, percentages, ratios, and estimation. Unlike the data interpretation tests, this measures raw numerical accuracy and speed. It is particularly relevant for operational, financial, and customer-facing roles where fast and accurate number handling is essential.",
+    "skills_measured": [
+      "Arithmetic accuracy", "Mental calculation", "Percentage and ratio",
+      "Numerical estimation", "Speed and accuracy", "Basic financial math"
+    ],
+    "test_type": "Cognitive",
+    "duration": "25 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["cashier", "accounts", "banking", "data entry", "operations", "retail", "finance"]
+  },
+  {
+    "name": "Coding Pro — Java",
+    "url": "https://www.shl.com/solutions/products/assessments/technology-skills/",
+    "description": "Coding Pro Java is a technical coding assessment that evaluates a candidate's Java programming skills through real coding challenges. Candidates write, debug, and optimize Java code in a realistic IDE environment. The assessment covers object-oriented programming, data structures, algorithms, exception handling, and Java-specific frameworks and patterns.",
+    "skills_measured": [
+      "Java programming", "Object-oriented design", "Data structures",
+      "Algorithms", "Exception handling", "Collections API",
+      "Debugging", "Code optimization", "Java best practices"
+    ],
+    "test_type": "Technical Skills",
+    "duration": "60-90 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["Java developers", "software engineers", "backend developers", "senior developers", "mid-level developers"]
+  },
+  {
+    "name": "Coding Pro — Python",
+    "url": "https://www.shl.com/solutions/products/assessments/technology-skills/",
+    "description": "Coding Pro Python evaluates Python programming ability through hands-on coding exercises in a live environment. It assesses Python syntax, data manipulation, algorithmic problem solving, and Pythonic coding practices. Suitable for backend, data science, and scripting roles.",
+    "skills_measured": [
+      "Python programming", "Data structures", "Algorithms",
+      "File I/O", "List comprehensions", "Error handling",
+      "Libraries and modules", "Scripting", "OOP in Python"
+    ],
+    "test_type": "Technical Skills",
+    "duration": "60-90 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["Python developers", "data engineers", "backend developers", "data scientists", "automation engineers"]
+  },
+  {
+    "name": "Coding Pro — SQL",
+    "url": "https://www.shl.com/solutions/products/assessments/technology-skills/",
+    "description": "Coding Pro SQL tests candidates on their ability to write, analyze, and optimize SQL queries. It covers SELECT statements, JOINs, subqueries, aggregation, filtering, and database design concepts. Candidates work against a real database environment. Ideal for data analyst, data engineer, and backend developer roles.",
+    "skills_measured": [
+      "SQL query writing", "JOINs and subqueries", "Aggregation and grouping",
+      "Database schema understanding", "Query optimization", "Data filtering",
+      "NULL handling", "Window functions", "Data manipulation (INSERT, UPDATE, DELETE)"
+    ],
+    "test_type": "Technical Skills",
+    "duration": "45-60 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["data analysts", "data engineers", "database administrators", "backend developers", "business intelligence"]
+  },
+  {
+    "name": "Coding Pro — JavaScript",
+    "url": "https://www.shl.com/solutions/products/assessments/technology-skills/",
+    "description": "Coding Pro JavaScript evaluates front-end and full-stack JavaScript skills including ES6+ syntax, DOM manipulation, asynchronous programming, and modern JavaScript patterns. Candidates solve real coding problems in a browser-based environment. Suitable for front-end, full-stack, and Node.js roles.",
+    "skills_measured": [
+      "JavaScript syntax (ES6+)", "Asynchronous programming (Promises, async/await)",
+      "DOM manipulation", "Array and object methods", "Closures and scope",
+      "Error handling", "Functional programming concepts", "REST API consumption"
+    ],
+    "test_type": "Technical Skills",
+    "duration": "60-90 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["front-end developers", "full-stack developers", "Node.js developers", "React developers"]
+  },
+  {
+    "name": "Situational Judgment Test (SJT) — Customer Service",
+    "url": "https://www.shl.com/solutions/products/assessments/situational-judgment-tests/",
+    "description": "SHL's Customer Service SJT presents candidates with realistic customer-facing scenarios and asks them to evaluate or choose responses. It measures critical judgment for handling customer complaints, diffusing conflict, and delivering excellent service under pressure. It is highly predictive of actual on-the-job customer service performance.",
+    "skills_measured": [
+      "Customer empathy", "Conflict resolution", "Problem-solving in service scenarios",
+      "Communication effectiveness", "Professionalism", "De-escalation",
+      "Customer retention mindset", "Service orientation"
+    ],
+    "test_type": "Situational Judgment",
+    "duration": "20-35 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["customer service", "call center", "retail", "hospitality", "front-line staff", "entry-level"]
+  },
+  {
+    "name": "Situational Judgment Test (SJT) — Management",
+    "url": "https://www.shl.com/solutions/products/assessments/situational-judgment-tests/",
+    "description": "The Management SJT presents realistic managerial scenarios and evaluates how candidates respond. It covers delegation, team performance management, conflict resolution, and stakeholder communication. It provides insight into practical management judgment without relying solely on experience claims.",
+    "skills_measured": [
+      "Team leadership", "Delegation", "Performance management",
+      "Conflict resolution", "Decision making under ambiguity",
+      "Stakeholder communication", "Prioritization", "Coaching and feedback"
+    ],
+    "test_type": "Situational Judgment",
+    "duration": "25-40 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["managers", "team leads", "supervisors", "mid-level management", "leadership candidates"]
+  },
+  {
+    "name": "Dependability and Safety Instrument (DSI)",
+    "url": "https://www.shl.com/solutions/products/assessments/personality-assessment/dependability-and-safety-instrument/",
+    "description": "The Dependability and Safety Instrument (DSI) is a personality-based assessment designed to screen for safety-conscious, dependable, and reliable employees. It identifies candidates who are less likely to engage in unsafe behaviors, counterproductive work behaviors, or absenteeism. Particularly valuable in high-risk environments such as manufacturing, construction, utilities, and transportation.",
+    "skills_measured": [
+      "Safety consciousness", "Rule compliance", "Dependability",
+      "Reliability", "Risk avoidance", "Counterproductive work behavior screening",
+      "Attention to procedure", "Conscientiousness in safety-critical tasks"
+    ],
+    "test_type": "Personality",
+    "duration": "15-20 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["warehouse", "manufacturing", "construction", "utilities", "transportation", "safety-critical roles", "entry-level", "operations"]
+  },
+  {
+    "name": "Graduate and Managerial Assessment (GMA)",
+    "url": "https://www.shl.com/solutions/products/assessments/cognitive-assessments/graduate-and-managerial-assessment/",
+    "description": "The Graduate and Managerial Assessment (GMA) is a comprehensive cognitive ability battery designed for graduate and managerial-level hiring. It combines verbal, numerical, and abstract reasoning into a single assessment designed for high-stakes, high-volume graduate recruitment. It provides norm comparisons against graduate-level populations.",
+    "skills_measured": [
+      "Verbal reasoning", "Numerical reasoning", "Abstract reasoning",
+      "Overall cognitive ability", "Graduate-level problem solving",
+      "Analytical thinking", "Business acumen"
+    ],
+    "test_type": "Cognitive",
+    "duration": "36-50 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["graduates", "management trainees", "early careers", "high-potential programs", "campus hiring"]
+  },
+  {
+    "name": "Agency Worker Profiler",
+    "url": "https://www.shl.com/solutions/products/assessments/personality-assessment/agency-worker-profiler/",
+    "description": "The Agency Worker Profiler is a short, efficient assessment designed for high-volume screening of temporary and agency workers. It measures reliability, safety awareness, work ethic, and suitability for operational roles. Designed to be completed quickly with minimal friction for candidates who may have limited assessment experience.",
+    "skills_measured": [
+      "Work ethic", "Reliability", "Safety awareness",
+      "Attendance and punctuality attitude", "Team fit",
+      "Customer orientation", "Adaptability to different work environments"
+    ],
+    "test_type": "Personality",
+    "duration": "10 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["temporary workers", "agency staff", "warehouse", "logistics", "entry-level", "high-volume hiring"]
+  },
+  {
+    "name": "Virtual Interview",
+    "url": "https://www.shl.com/solutions/products/assessments/video-interview/",
+    "description": "SHL's Virtual Interview is an on-demand video interview platform where candidates record responses to structured behavioral and situational questions at their convenience. Responses are scored using SHL's AI-powered video analysis. It provides a standardized, bias-reduced interview experience at scale, saving recruiter time while maintaining assessment quality.",
+    "skills_measured": [
+      "Communication skills", "Behavioral competencies", "Situational judgment",
+      "Professional presentation", "Structured thinking", "Role-specific competencies",
+      "Verbal fluency", "Self-presentation"
+    ],
+    "test_type": "Video Interview",
+    "duration": "20-30 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["all levels", "graduate", "professional", "customer service", "sales", "high-volume screening"]
+  },
+  {
+    "name": "Sales Assessment",
+    "url": "https://www.shl.com/solutions/products/assessments/job-focused-assessments/sales-assessment/",
+    "description": "SHL's Sales Assessment evaluates the personality traits, motivations, and cognitive abilities most predictive of sales success. It combines elements of personality (drive, resilience, persuasion), cognitive ability, and situational judgment specific to sales scenarios. It helps organizations hire salespeople who will consistently meet targets and build client relationships.",
+    "skills_measured": [
+      "Sales drive and motivation", "Persuasion and influence", "Resilience to rejection",
+      "Customer relationship building", "Prospecting mindset", "Negotiation",
+      "Target orientation", "Persistence", "Commercial awareness"
+    ],
+    "test_type": "Job-Focused",
+    "duration": "30-45 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["sales representatives", "account managers", "business development", "sales managers", "inside sales"]
+  },
+  {
+    "name": "Contact Center Assessment",
+    "url": "https://www.shl.com/solutions/products/assessments/job-focused-assessments/contact-center/",
+    "description": "SHL's Contact Center Assessment is purpose-built for high-volume contact center and call center hiring. It evaluates customer service orientation, resilience, multitasking ability, and communication skills through a combination of personality, cognitive, and situational exercises designed to reflect the demands of contact center work.",
+    "skills_measured": [
+      "Customer service orientation", "Resilience and stress tolerance",
+      "Multitasking", "Active listening", "Clear verbal communication",
+      "Problem resolution", "Empathy", "Accuracy under pressure"
+    ],
+    "test_type": "Job-Focused",
+    "duration": "30-40 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["call center agents", "customer service representatives", "help desk", "support staff", "entry-level"]
+  },
+  {
+    "name": "Verify Checking",
+    "url": "https://www.shl.com/solutions/products/assessments/cognitive-assessments/verify-range-of-ability-tests/",
+    "description": "Verify Checking is a speed and accuracy test that measures the ability to identify errors and discrepancies in data, documents, and records. Candidates compare pairs of information and identify differences under time pressure. Highly relevant for data entry, administrative, financial, and compliance roles where accuracy is critical.",
+    "skills_measured": [
+      "Attention to detail", "Data accuracy", "Error identification",
+      "Speed and accuracy balance", "Concentration", "Document verification",
+      "Proofreading ability"
+    ],
+    "test_type": "Cognitive",
+    "duration": "15 minutes",
+    "remote_testing": true,
+    "adaptive": false,
+    "suitable_for": ["data entry", "administrative", "finance", "compliance", "banking", "insurance", "back office"]
+  }
+]

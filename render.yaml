@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: shl-assessment-recommender
+    env: python
+    region: oregon
+
+    # Build: install deps and build the FAISS index from seed data
+    buildCommand: >
+      pip install -r requirements.txt &&
+      python scripts/build_index.py --use-seed
+
+    # Start: bind to Render's dynamic $PORT
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+
+    # Python runtime
+    pythonVersion: "3.11"
+
+    # Health check — Render will restart the service if this fails
+    healthCheckPath: /health
+
+    envVars:
+      # LLM provider: "gemini" or "openrouter"
+      - key: LLM_PROVIDER
+        value: gemini
+
+      # Set your API key in the Render dashboard (never commit secrets)
+      - key: GEMINI_API_KEY
+        sync: false   # Must be set manually in Render environment settings
+
+      # Optional: only needed if LLM_PROVIDER=openrouter
+      - key: OPENROUTER_API_KEY
+        sync: false
+
+      - key: OPENROUTER_MODEL
+        value: openai/gpt-4o-mini
+
+      - key: GEMINI_MODEL
+        value: gemini-1.5-flash
+
+    # Auto-deploy on push to main
+    autoDeploy: true
