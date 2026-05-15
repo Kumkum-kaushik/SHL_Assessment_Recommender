@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 # ─────────────────────────────────────────────
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+GROQ_BASE_URL = "https://api.groq.com/openai/v1"
 
 
 def _cfg(key: str, default: str = "") -> str:
@@ -71,6 +72,23 @@ def _call_openrouter(prompt: str) -> str:
     return response.choices[0].message.content or ""
 
 
+def _call_groq(prompt: str) -> str:
+    """Call Groq API (OpenAI-compatible, free tier) and return raw text response."""
+    from openai import OpenAI
+
+    client = OpenAI(
+        base_url=GROQ_BASE_URL,
+        api_key=_cfg("GROQ_API_KEY"),
+    )
+    response = client.chat.completions.create(
+        model=_cfg("GROQ_MODEL", "llama-3.1-8b-instant"),
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.2,
+        max_tokens=1024,
+    )
+    return response.choices[0].message.content or ""
+
+
 # ─────────────────────────────────────────────
 # Unified interface
 # ─────────────────────────────────────────────
@@ -80,7 +98,13 @@ def call_llm(prompt: str) -> str:
     Call the configured LLM provider with retry logic.
     Returns raw text. Raises RuntimeError after exhausting retries.
     """
-    caller = _call_gemini if _cfg("LLM_PROVIDER", "gemini").lower() == "gemini" else _call_openrouter
+    provider = _cfg("LLM_PROVIDER", "gemini").lower()
+    if provider == "gemini":
+        caller = _call_gemini
+    elif provider == "groq":
+        caller = _call_groq
+    else:
+        caller = _call_openrouter
 
     for attempt in range(1, MAX_RETRIES + 1):
         try:
