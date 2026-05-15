@@ -3,7 +3,7 @@ FROM python:3.11-slim AS builder
 
 WORKDIR /build
 
-# System dependencies for faiss-cpu and sentence-transformers
+# System dependencies for faiss-cpu
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \

@@ -1,15 +1,16 @@
 """
-Text embedding using sentence-transformers/all-MiniLM-L6-v2.
+Text embedding using fastembed (ONNX-based, no PyTorch).
 
-Produces L2-normalised embeddings suitable for cosine similarity
-via FAISS IndexFlatIP (inner product == cosine sim for unit vectors).
+Uses all-MiniLM-L6-v2 via ONNX Runtime — same model quality as
+sentence-transformers but ~150MB RAM instead of ~800MB.
+Produces L2-normalised embeddings for cosine similarity via FAISS IndexFlatIP.
 """
 
 import logging
 from functools import lru_cache
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 
 logger = logging.getLogger(__name__)
 
@@ -17,12 +18,12 @@ MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 
 class Embedder:
-    """Singleton-safe text embedder wrapping SentenceTransformer."""
+    """Singleton-safe text embedder wrapping fastembed."""
 
     def __init__(self, model_name: str = MODEL_NAME):
         logger.info("Loading embedding model: %s", model_name)
-        self.model = SentenceTransformer(model_name)
-        self.dimension = self.model.get_sentence_embedding_dimension()
+        self.model = TextEmbedding(model_name=model_name)
+        self.dimension = 384  # all-MiniLM-L6-v2 output dimension
         logger.info("Embedding model loaded. Dimension: %d", self.dimension)
 
     def embed(self, texts: list[str]) -> np.ndarray:
@@ -33,14 +34,13 @@ class Embedder:
         if not texts:
             return np.empty((0, self.dimension), dtype=np.float32)
 
-        embeddings = self.model.encode(
-            texts,
-            normalize_embeddings=True,   # Unit norm → cosine sim via dot product
-            show_progress_bar=len(texts) > 50,
-            batch_size=32,
-            convert_to_numpy=True,
-        )
-        return embeddings.astype(np.float32)
+        embeddings = list(self.model.embed(texts))
+        arr = np.array(embeddings, dtype=np.float32)
+
+        # L2-normalise for cosine similarity via inner product
+        norms = np.linalg.norm(arr, axis=1, keepdims=True)
+        norms = np.where(norms == 0, 1, norms)
+        return arr / norms
 
     def embed_query(self, query: str) -> np.ndarray:
         """
