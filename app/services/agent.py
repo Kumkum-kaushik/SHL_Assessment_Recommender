@@ -310,8 +310,17 @@ def _handle_compare(messages: list[Message]) -> dict:
         (m.content for m in reversed(messages) if m.role == "user"), ""
     )
     retriever = get_retriever()
-    # Search for assessments mentioned by name + general query
-    retrieved = retriever.search(last_user, k=6)
+    # Search by full last message + each word individually to catch named assessments
+    # k=5 per search ensures acronyms like GSA/OPQ find their full catalog entries
+    seen_urls: set[str] = set()
+    retrieved: list[dict] = []
+    for q in [last_user] + last_user.split():
+        if len(q) < 3:
+            continue
+        for r in retriever.search(q, k=5):
+            if r["url"] not in seen_urls:
+                seen_urls.add(r["url"])
+                retrieved.append(r)
     context = format_retrieved_context(retrieved)
     history = format_conversation_history(messages)
     prompt = COMPARISON_PROMPT.format(context=context, history=history)
