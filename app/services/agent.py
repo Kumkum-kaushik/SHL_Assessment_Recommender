@@ -113,6 +113,8 @@ def _has_enough_context(messages: list[Message]) -> bool:
             "contact center", "contact centre", "call center", "call centre",
             "plant operator", "manufacturing", "industrial", "safety",
             "leadership", "cxo", "ceo", "cfo", "cto", "trainee", "agent",
+            "admin", "administrative", "assistant", "clerical", "secretary",
+            "receptionist", "coordinator", "office", "excel", "word",
         ]
     )
     return has_role
@@ -212,9 +214,11 @@ _DOMAIN_SUPPLEMENTS: list[tuple[re.Pattern, list[tuple[str, int]]]] = [
     (re.compile(r"\b(healthcare|medical|hospital|patient|clinical|nursing|hipaa)\b", re.IGNORECASE),
      [("medical terminology healthcare knowledge HIPAA", 3),
       ("dependability safety instrument DSI trust reliability", 2)]),
-    # Sales / reskilling / talent audit → global skills assessment
-    (re.compile(r"\b(reskill|re.skill|talent audit|restructur|sales organization|upskill)\b", re.IGNORECASE),
-     [("global skills assessment development report talent", 3)]),
+    # Sales / reskilling / talent audit → global skills assessment + OPQ MQ Sales
+    (re.compile(r"\b(reskill|re.?skill|talent audit|restructur|reorganiz|sales organization|upskill)\b", re.IGNORECASE),
+     [("global skills assessment development report talent audit team", 4),
+      ("global skills development report GSA talent audit workforce", 3),
+      ("OPQ MQ sales report personality occupational questionnaire sales manager", 3)]),
     # Software engineers (any language) → live coding interview
     (re.compile(r"\b(engineer|developer|software|coding|programmer)\b", re.IGNORECASE),
      [("smart interview live coding technical programming", 2)]),
