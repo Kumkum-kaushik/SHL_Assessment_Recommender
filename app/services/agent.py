@@ -36,7 +36,8 @@ logger = logging.getLogger(__name__)
 _SATISFIED_PATTERNS = re.compile(
     r"\b(perfect|great|thanks|thank you|that works|that'?s (what|it|all|correct|perfect)|"
     r"looks good|approved|confirmed|finalized|locking|that covers|all good|sounds good|"
-    r"got it|done|exactly|just what|no more|nothing else|that'?s enough|we'?re good)\b",
+    r"got it|done|exactly|just what|no more|nothing else|that'?s enough|we'?re good|"
+    r"final list|final shortlist|final battery|that'?s final|that is final)\b",
     re.IGNORECASE,
 )
 
