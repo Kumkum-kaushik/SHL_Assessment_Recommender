@@ -102,12 +102,10 @@ class FAISSRetriever:
     def build_retrieval_query(self, messages: list) -> str:
         """
         Construct a rich retrieval query from conversation history.
-        Concatenates all user messages to capture the full context.
+        Uses all user messages to capture the full context for better recall.
         """
-        user_texts = [
-            m.content for m in messages if m.role == "user"
-        ]
-        return " ".join(user_texts[-3:])  # Use last 3 user turns max
+        user_texts = [m.content for m in messages if m.role == "user"]
+        return " ".join(user_texts)  # Use all user turns for maximum recall
 
 
 # Module-level singleton — loaded once when the app starts

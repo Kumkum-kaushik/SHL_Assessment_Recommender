@@ -58,7 +58,7 @@ def build_assessment_text(assessment: dict) -> str:
     parts = [
         assessment.get("name", ""),
         assessment.get("description", ""),
-        f"Test type: {assessment.get('test_type', '')}",
+        f"Category: {assessment.get('test_type', '')}",
         f"Duration: {assessment.get('duration', '')}",
     ]
 
@@ -68,7 +68,11 @@ def build_assessment_text(assessment: dict) -> str:
 
     suitable = assessment.get("suitable_for", [])
     if suitable:
-        parts.append(f"Suitable for: {', '.join(suitable)}")
+        parts.append(f"Job levels: {', '.join(suitable)}")
+
+    languages = assessment.get("languages", [])
+    if languages:
+        parts.append(f"Languages: {', '.join(languages[:5])}")
 
     if assessment.get("adaptive"):
         parts.append("Adaptive assessment")

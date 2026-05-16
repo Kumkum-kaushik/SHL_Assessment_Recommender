@@ -33,6 +33,13 @@ logger = logging.getLogger(__name__)
 # Pre-filter patterns (no LLM cost)
 # ─────────────────────────────────────────────
 
+_SATISFIED_PATTERNS = re.compile(
+    r"\b(perfect|great|thanks|thank you|that works|that'?s (what|it|all|correct|perfect)|"
+    r"looks good|approved|confirmed|finalized|locking|that covers|all good|sounds good|"
+    r"got it|done|exactly|just what|no more|nothing else|that'?s enough|we'?re good)\b",
+    re.IGNORECASE,
+)
+
 _OFF_TOPIC_PATTERNS = [
     r"\b(legal|lawsuit|lawyer|court|sue|attorney|litigation)\b",
     r"\b(medical|diagnos|prescri|treatment|doctor|clinical)\b",
@@ -64,14 +71,20 @@ def _looks_like_comparison(text: str) -> bool:
 
 
 def _has_prior_recommendations(messages: list[Message]) -> bool:
-    """Check if the assistant has already made recommendations in this conversation."""
+    """Check if the assistant has already made CONCRETE recommendations (URLs present)."""
     for msg in messages:
-        if msg.role == "assistant" and (
-            "recommendation" in msg.content.lower()
-            or "assess" in msg.content.lower()
-        ):
+        if msg.role == "assistant" and "shl.com" in msg.content.lower():
             return True
     return False
+
+
+def _count_clarification_turns(messages: list[Message]) -> int:
+    """Count assistant turns that asked questions but gave no recommendations."""
+    count = 0
+    for msg in messages:
+        if msg.role == "assistant" and "?" in msg.content and "shl.com" not in msg.content.lower():
+            count += 1
+    return count
 
 
 def _has_enough_context(messages: list[Message]) -> bool:
@@ -108,6 +121,7 @@ def detect_intent(messages: list[Message]) -> str:
     last_user = next(
         (m.content for m in reversed(messages) if m.role == "user"), ""
     )
+    user_turn_count = sum(1 for m in messages if m.role == "user")
 
     # Stage 1: rule-based pre-filters
     if _is_off_topic(last_user):
@@ -118,10 +132,20 @@ def detect_intent(messages: list[Message]) -> str:
         logger.info("Intent (rule): COMPARE")
         return "COMPARE"
 
+    # Hard cap: must give recommendations by turn 7 to honour max-8 turn limit
+    if user_turn_count >= 7:
+        logger.info("Intent (rule): RECOMMEND — approaching turn cap (%d turns)", user_turn_count)
+        return "RECOMMEND"
+
+    # If agent already gave concrete recs and user didn't add new role context → refine
     if _has_prior_recommendations(messages) and not _has_enough_context(messages):
-        # User is continuing conversation without adding new job-role info → refine
         logger.info("Intent (rule): REFINE — modifying prior recommendations")
         return "REFINE"
+
+    # After 2 clarification rounds, stop asking and try to recommend with what we have
+    if _count_clarification_turns(messages) >= 2:
+        logger.info("Intent (rule): RECOMMEND — 2 clarifications done, attempting recommendation")
+        return "RECOMMEND"
 
     if not _has_enough_context(messages):
         logger.info("Intent (rule): CLARIFY — insufficient context")
@@ -148,15 +172,91 @@ def _handle_clarify(messages: list[Message]) -> dict:
     return call_llm_json(prompt)
 
 
+# Technology keywords that warrant dedicated sub-queries because they get
+# diluted when mixed with other terms in a long query.
+_TECH_KEYWORDS = re.compile(
+    r"\b(java|python|sql|aws|docker|spring|angular|react|node|kubernetes|"
+    r"linux|networking|rest|restful|javascript|typescript|css|html|"
+    r"excel|word|office|powerpoint|outlook|sharepoint|"
+    r"medical|hipaa|nursing|healthcare|"
+    r"sales|contact.?center|customer.?service|"
+    r"global skills|safety|dependability|warehouse)\b",
+    re.IGNORECASE,
+)
+
+# Domain-level signals → supplementary queries that pull niche but relevant items
+_DOMAIN_SUPPLEMENTS: list[tuple[re.Pattern, list[tuple[str, int]]]] = [
+    # Healthcare / medical admin roles → medical terminology, DSI
+    (re.compile(r"\b(healthcare|medical|hospital|patient|clinical|nursing|hipaa)\b", re.IGNORECASE),
+     [("medical terminology healthcare knowledge HIPAA", 3),
+      ("dependability safety instrument DSI trust reliability", 2)]),
+    # Sales / reskilling / talent audit → global skills assessment
+    (re.compile(r"\b(reskill|re.skill|talent audit|restructur|sales organization|upskill)\b", re.IGNORECASE),
+     [("global skills assessment development report talent", 3)]),
+    # Software engineers (any language) → live coding interview
+    (re.compile(r"\b(engineer|developer|software|coding|programmer)\b", re.IGNORECASE),
+     [("smart interview live coding technical programming", 2)]),
+    # Graduate / entry-level → situational judgement scenarios
+    (re.compile(r"\b(graduate|trainee|entry.?level|intern|fresh)\b", re.IGNORECASE),
+     [("graduate scenarios situational judgment entry level", 2)]),
+    # Safety-critical / warehouse / dependability
+    (re.compile(r"\b(safety|warehouse|manufacturing|dependab|front.?line)\b", re.IGNORECASE),
+     [("dependability safety instrument workplace health safety", 3)]),
+    # Office / admin roles → Microsoft Office assessments
+    (re.compile(r"\b(admin|administrative|office|secretary|records|clerical)\b", re.IGNORECASE),
+     [("Microsoft Word Excel Office 365 administrative skills", 3)]),
+]
+
+
+def _multi_query_retrieve(retriever, query: str, k_main: int = 15) -> list[dict]:
+    """
+    Multi-query retrieval to ensure broad coverage.
+
+    1. Primary: full conversation query (role/context)
+    2. Supplementary standard: OPQ32r + Verify Interactive G+ (universally relevant)
+    3. Supplementary per-tech: each technology keyword gets its own search
+       to avoid dilution in multi-skill queries (Java+Spring+SQL+AWS+Docker)
+    4. Supplementary per-domain: domain-pattern signals pull niche items
+       that require agent inference (e.g. healthcare → medical terminology)
+    """
+    results = retriever.search(query, k=k_main)
+    seen_urls = {r["url"] for r in results}
+
+    def _add(sup_query: str, k: int) -> None:
+        for r in retriever.search(sup_query, k=k):
+            if r["url"] not in seen_urls:
+                results.append(r)
+                seen_urls.add(r["url"])
+
+    # Always-relevant assessments (score poorly on job-specific queries)
+    _add("OPQ32r occupational personality questionnaire workplace behavior selection", 3)
+    _add("SHL Verify Interactive G+ adaptive cognitive ability general reasoning", 3)
+
+    # Per-technology sub-queries
+    seen_tech: set[str] = set()
+    for tech in _TECH_KEYWORDS.findall(query):
+        t = tech.lower()
+        if t not in seen_tech:
+            seen_tech.add(t)
+            _add(f"{tech} knowledge assessment skills test", 2)
+
+    # Domain-level supplementary queries
+    for pattern, supplements in _DOMAIN_SUPPLEMENTS:
+        if pattern.search(query):
+            for sup_query, k in supplements:
+                _add(sup_query, k)
+
+    return results
+
+
 def _handle_recommend(messages: list[Message]) -> dict:
     retriever = get_retriever()
     query = retriever.build_retrieval_query(messages)
-    retrieved = retriever.search(query, k=8)
+    retrieved = _multi_query_retrieve(retriever, query, k_main=12)
     context = format_retrieved_context(retrieved)
     history = format_conversation_history(messages)
     prompt = RECOMMENDATION_PROMPT.format(context=context, history=history)
     result = call_llm_json(prompt)
-    # Ground check: ensure returned URLs exist in retrieved context
     result["recommendations"] = _ground_recommendations(
         result.get("recommendations", []), retrieved
     )
@@ -166,7 +266,7 @@ def _handle_recommend(messages: list[Message]) -> dict:
 def _handle_refine(messages: list[Message]) -> dict:
     retriever = get_retriever()
     query = retriever.build_retrieval_query(messages)
-    retrieved = retriever.search(query, k=10)
+    retrieved = _multi_query_retrieve(retriever, query, k_main=10)
     context = format_retrieved_context(retrieved)
     history = format_conversation_history(messages)
     prompt = REFINEMENT_PROMPT.format(context=context, history=history)
@@ -216,40 +316,45 @@ def _ground_recommendations(
     recs: list[dict], retrieved: list[dict]
 ) -> list[dict]:
     """
-    Remove any recommendations whose URL does not appear in retrieved context.
-    This is the anti-hallucination safeguard — the LLM can only recommend
-    assessments that were actually retrieved from the catalog.
+    Remove any recommendations whose URL/name doesn't match the retrieved context.
+    Canonicalizes names and URLs back to exact catalog values to prevent drift.
     """
     if not retrieved:
         return []
 
-    # Build a set of valid (name, url) pairs from retrieval results
-    valid_urls = {r["url"].rstrip("/").lower() for r in retrieved}
-    valid_names = {r["name"].lower() for r in retrieved}
+    # Index retrieved items by normalised URL and normalised name
+    by_url = {r["url"].rstrip("/").lower(): r for r in retrieved}
+    by_name = {r["name"].lower(): r for r in retrieved}
 
     grounded = []
     for rec in recs:
         rec_url = rec.get("url", "").rstrip("/").lower()
         rec_name = rec.get("name", "").lower()
 
-        # Accept if URL matches OR name matches (LLM might slightly rephrase the URL)
-        if rec_url in valid_urls or any(
-            vn in rec_name or rec_name in vn for vn in valid_names
-        ):
-            # Canonicalize: use the retrieved metadata's URL and name
-            matched = next(
-                (r for r in retrieved if r["url"].rstrip("/").lower() == rec_url
-                 or r["name"].lower() in rec_name or rec_name in r["name"].lower()),
-                None,
-            )
-            if matched:
-                grounded.append({
-                    "name": matched["name"],
-                    "url": matched["url"],
-                    "test_type": matched.get("test_type", rec.get("test_type", "Assessment")),
-                })
+        matched = None
+
+        # Exact URL match first (most reliable)
+        if rec_url in by_url:
+            matched = by_url[rec_url]
+        else:
+            # Exact name match
+            if rec_name in by_name:
+                matched = by_name[rec_name]
             else:
-                grounded.append(rec)
+                # Substring name match (LLM may shorten/lengthen names slightly)
+                for catalog_name, item in by_name.items():
+                    if catalog_name in rec_name or rec_name in catalog_name:
+                        matched = item
+                        break
+
+        if matched:
+            grounded.append({
+                "name": matched["name"],
+                "url": matched["url"],
+                "test_type": matched.get("test_type", rec.get("test_type", "Assessment")),
+            })
+        else:
+            logger.debug("Grounding dropped hallucinated rec: %s (%s)", rec.get("name"), rec.get("url"))
 
     return grounded[:10]
 
@@ -288,11 +393,21 @@ def process_chat(request: ChatRequest) -> ChatResponse:
     except Exception as exc:
         logger.error("Agent error: %s", exc, exc_info=True)
         result = safe_fallback_response()
+        intent = "CLARIFY"
+
+    recs = [Recommendation(**r) for r in result.get("recommendations", [])]
+
+    # end_of_conversation: true only when the user signals they are satisfied
+    # AND we have already given them a shortlist. Never true on the first
+    # recommendation turn — the user must confirm before we close.
+    last_user = next((m.content for m in reversed(messages) if m.role == "user"), "")
+    user_is_satisfied = bool(_SATISFIED_PATTERNS.search(last_user))
+    end_conv = (
+        user_is_satisfied and _has_prior_recommendations(messages)
+    ) or result.get("end_of_conversation", False)
 
     return ChatResponse(
         reply=result.get("reply", ""),
-        recommendations=[
-            Recommendation(**r) for r in result.get("recommendations", [])
-        ],
-        end_of_conversation=result.get("end_of_conversation", False),
+        recommendations=recs,
+        end_of_conversation=end_conv,
     )

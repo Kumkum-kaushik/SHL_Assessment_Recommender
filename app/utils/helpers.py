@@ -59,15 +59,18 @@ def format_retrieved_context(assessments: list[dict]) -> str:
 
     sections = []
     for i, a in enumerate(assessments, 1):
-        skills = ", ".join(a.get("skills_measured", []))
         suitable = ", ".join(a.get("suitable_for", []))
+        langs = ", ".join(a.get("languages", [])[:4])
+        code = a.get("test_type_code", "")
+        type_label = a.get("test_type", "N/A")
+        type_display = f"{code} — {type_label}" if code else type_label
         section = (
             f"[{i}] {a['name']}\n"
             f"    URL: {a['url']}\n"
-            f"    Type: {a.get('test_type', 'N/A')}\n"
-            f"    Duration: {a.get('duration', 'N/A')}\n"
-            f"    Measures: {skills or 'N/A'}\n"
-            f"    Suitable for: {suitable or 'N/A'}\n"
+            f"    Type: {type_display}\n"
+            f"    Duration: {a.get('duration', 'Varies')}\n"
+            f"    Job levels: {suitable or 'N/A'}\n"
+            f"    Languages: {langs or 'N/A'}\n"
             f"    Description: {a.get('description', '')[:300]}"
         )
         sections.append(section)
