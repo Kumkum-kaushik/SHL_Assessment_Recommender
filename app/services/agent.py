@@ -41,12 +41,19 @@ _SATISFIED_PATTERNS = re.compile(
 )
 
 _OFF_TOPIC_PATTERNS = [
-    r"\b(legal|lawsuit|lawyer|court|sue|attorney|litigation)\b",
-    r"\b(medical|diagnos|prescri|treatment|doctor|clinical)\b",
+    # Legal ADVICE requests (not hiring for legal roles)
+    r"\b(lawsuit|lawyer|court|sue|attorney|litigation)\b",
+    r"\blegal (advice|counsel|opinion|requirement|obligation|compliance question)\b",
+    # Medical ADVICE (not hiring for medical/healthcare roles)
+    r"\b(diagnos|prescri|prescription|medical advice|treatment plan|clinical trial result)\b",
+    # Competitor tools
     r"\b(hogan|korn ferry|criteria|hirevue|pymetrics|mercer mettl|assessment\.com)\b",
-    r"\b(write me|draft|template|script|email|cover letter|resume|cv)\b",
-    r"\b(interview questions?|onboarding|background check|reference check)\b",
-    r"\bsalary|compensation|benefits|payroll\b",
+    # Writing tasks (not assessment selection)
+    r"\b(write me|draft me|draft a|generate a template|write an email|cover letter|resume|cv)\b",
+    # Non-assessment HR tasks
+    r"\b(interview questions?|onboarding plan|background check|reference check)\b",
+    r"\b(salary|compensation|benefits|payroll)\b",
+    # Prompt injection
     r"ignore\s+.{0,20}\binstructions?\b",
     r"pretend (you are|to be|you're)",
     r"new (system )?prompt",
