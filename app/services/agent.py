@@ -231,7 +231,8 @@ _DOMAIN_SUPPLEMENTS: list[tuple[re.Pattern, list[tuple[str, int]]]] = [
      [("networking implementation linux programming general systems", 3)]),
     # Finance / accounting / analyst
     (re.compile(r"\b(finance|financial|accounting|accountant|analyst|investment|banking|fintech)\b", re.IGNORECASE),
-     [("financial accounting statistics numerical reasoning analyst", 3)]),
+     [("financial accounting statistics numerical reasoning analyst", 3),
+      ("basic statistics math quantitative knowledge test", 2)]),
 ]
 
 
@@ -265,7 +266,7 @@ def _multi_query_retrieve(retriever, query: str, k_main: int = 15) -> list[dict]
         t = tech.lower()
         if t not in seen_tech:
             seen_tech.add(t)
-            _add(f"{tech} knowledge assessment skills test", 2)
+            _add(f"{tech} knowledge assessment skills test", 3)
 
     # Domain-level supplementary queries
     for pattern, supplements in _DOMAIN_SUPPLEMENTS:
