@@ -65,6 +65,13 @@ _COMPARE_PATTERNS = [
     r"\b(compare|comparison|versus|vs\.?|difference between|which is better|distinguish)\b",
 ]
 
+_REFINE_PATTERNS = re.compile(
+    r"\b(add|also add|include|also include|remove|drop|swap|replace|exclude|"
+    r"change to|fewer|more like|instead of|without|and also|plus|can you add|"
+    r"locking|confirmed|perfect|that works|that'?s (all|it|correct|good))\b",
+    re.IGNORECASE,
+)
+
 _OFF_TOPIC_RE = re.compile("|".join(_OFF_TOPIC_PATTERNS), re.IGNORECASE)
 _COMPARE_RE = re.compile("|".join(_COMPARE_PATTERNS), re.IGNORECASE)
 
@@ -144,6 +151,11 @@ def detect_intent(messages: list[Message]) -> str:
     if _looks_like_comparison(last_user):
         logger.info("Intent (rule): COMPARE")
         return "COMPARE"
+
+    # If prior recs exist and user is modifying/confirming, always REFINE
+    if _has_prior_recommendations(messages) and bool(_REFINE_PATTERNS.search(last_user)):
+        logger.info("Intent (rule): REFINE — modification/confirmation pattern with prior recs")
+        return "REFINE"
 
     # Hard turn cap: force RECOMMEND when approaching the 8-turn limit.
     # Triggers at user turn 6 (one turn early) OR total messages >= 11
