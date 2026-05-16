@@ -132,6 +132,7 @@ def detect_intent(messages: list[Message]) -> str:
         (m.content for m in reversed(messages) if m.role == "user"), ""
     )
     user_turn_count = sum(1 for m in messages if m.role == "user")
+    total_message_count = len(messages)
 
     # Stage 1: rule-based pre-filters
     if _is_off_topic(last_user):
@@ -142,9 +143,15 @@ def detect_intent(messages: list[Message]) -> str:
         logger.info("Intent (rule): COMPARE")
         return "COMPARE"
 
-    # Hard cap: must give recommendations by turn 7 to honour max-8 turn limit
-    if user_turn_count >= 7:
-        logger.info("Intent (rule): RECOMMEND — approaching turn cap (%d turns)", user_turn_count)
+    # Hard turn cap: force RECOMMEND when approaching the 8-turn limit.
+    # Triggers at user turn 6 (one turn early) OR total messages >= 11
+    # so we always return a recommendation before the conversation is cut off.
+    if user_turn_count >= 6 or total_message_count >= 11:
+        logger.info(
+            "Intent (rule): RECOMMEND — approaching turn cap "
+            "(user_turns=%d, total_messages=%d)",
+            user_turn_count, total_message_count,
+        )
         return "RECOMMEND"
 
     # If agent already gave concrete recs and user didn't add new role context → refine
