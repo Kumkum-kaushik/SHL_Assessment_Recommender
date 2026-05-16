@@ -110,6 +110,9 @@ def _has_enough_context(messages: list[Message]) -> bool:
             "java", "python", "software", "front-end", "backend", "full-stack",
             "junior", "senior", "mid-level", "entry", "hire", "hiring",
             "recruit", "assess", "personality", "cognitive", "technical",
+            "contact center", "contact centre", "call center", "call centre",
+            "plant operator", "manufacturing", "industrial", "safety",
+            "leadership", "cxo", "ceo", "cfo", "cto", "trainee", "agent",
         ]
     )
     return has_role
@@ -206,12 +209,29 @@ _DOMAIN_SUPPLEMENTS: list[tuple[re.Pattern, list[tuple[str, int]]]] = [
     # Graduate / entry-level → situational judgement scenarios
     (re.compile(r"\b(graduate|trainee|entry.?level|intern|fresh)\b", re.IGNORECASE),
      [("graduate scenarios situational judgment entry level", 2)]),
-    # Safety-critical / warehouse / dependability
-    (re.compile(r"\b(safety|warehouse|manufacturing|dependab|front.?line)\b", re.IGNORECASE),
-     [("dependability safety instrument workplace health safety", 3)]),
-    # Office / admin roles → Microsoft Office assessments
+    # Safety-critical / warehouse / industrial plant → dependability + manufacturing bundle
+    (re.compile(r"\b(safety|warehouse|manufacturing|dependab|front.?line|plant|chemical|industrial|operator)\b", re.IGNORECASE),
+     [("dependability safety instrument DSI workplace health safety", 3),
+      ("manufacturing industrial safety dependability 8.0 plant operator", 3)]),
+    # Office / admin roles → Microsoft Office assessments (knowledge + 365 simulations)
     (re.compile(r"\b(admin|administrative|office|secretary|records|clerical)\b", re.IGNORECASE),
-     [("Microsoft Word Excel Office 365 administrative skills", 3)]),
+     [("Microsoft Word Excel Office 365 simulation administrative skills", 4),
+      ("MS Excel MS Word knowledge administrative assistant", 3)]),
+    # Leadership / executive / senior management selection
+    (re.compile(r"\b(leadership|executive|cxo|ceo|cfo|cto|vp\b|director|senior management|c.suite|c.level)\b", re.IGNORECASE),
+     [("OPQ leadership report executive senior selection benchmark", 3),
+      ("OPQ universal competency report personality behavior UCR", 3)]),
+    # Contact center / customer service roles
+    (re.compile(r"\b(contact.?cent(er|re)|call.?cent(er|re)|customer.?service|inbound|outbound|call agent)\b", re.IGNORECASE),
+     [("SVAR spoken English contact center call simulation screen", 3),
+      ("entry level customer service retail contact center personality", 3),
+      ("customer service phone simulation biodata situational judgment", 2)]),
+    # Networking / systems / infrastructure / low-level languages
+    (re.compile(r"\b(network(ing)?|infrastructure|systems? programming|rust|embedded|linux|low.?level)\b", re.IGNORECASE),
+     [("networking implementation linux programming general systems", 3)]),
+    # Finance / accounting / analyst
+    (re.compile(r"\b(finance|financial|accounting|accountant|analyst|investment|banking|fintech)\b", re.IGNORECASE),
+     [("financial accounting statistics numerical reasoning analyst", 3)]),
 ]
 
 
