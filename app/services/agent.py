@@ -146,7 +146,7 @@ def detect_intent(messages: list[Message]) -> str:
     # Hard turn cap: force RECOMMEND when approaching the 8-turn limit.
     # Triggers at user turn 6 (one turn early) OR total messages >= 11
     # so we always return a recommendation before the conversation is cut off.
-    if user_turn_count >= 6 or total_message_count >= 11:
+    if user_turn_count >= 6 or total_message_count >= 7:
         logger.info(
             "Intent (rule): RECOMMEND — approaching turn cap "
             "(user_turns=%d, total_messages=%d)",
