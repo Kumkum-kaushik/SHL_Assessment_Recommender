@@ -167,6 +167,12 @@ def detect_intent(messages: list[Message]) -> str:
         logger.info("Intent (rule): CLARIFY — insufficient context")
         return "CLARIFY"
 
+    # Enough context on first user message → recommend directly, no LLM needed.
+    # Prevents LLM from over-clarifying when role + skill signals are already present.
+    if _count_clarification_turns(messages) == 0 and not _has_prior_recommendations(messages):
+        logger.info("Intent (rule): RECOMMEND — sufficient context on first pass")
+        return "RECOMMEND"
+
     # Stage 2: LLM classification for nuanced cases
     history = format_conversation_history(messages[:-1])  # Exclude last message
     prompt = INTENT_CLASSIFICATION_PROMPT.format(
@@ -238,6 +244,7 @@ _DOMAIN_SUPPLEMENTS: list[tuple[re.Pattern, list[tuple[str, int]]]] = [
     # Finance / accounting / analyst
     (re.compile(r"\b(finance|financial|accounting|accountant|analyst|investment|banking|fintech)\b", re.IGNORECASE),
      [("financial accounting statistics numerical reasoning analyst", 3),
+      ("SHL Verify Interactive numerical reasoning finance graduate analyst", 3),
       ("basic statistics math quantitative knowledge test", 2)]),
 ]
 
